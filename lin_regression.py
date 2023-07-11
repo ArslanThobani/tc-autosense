@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestRegressor
-import xgboost as xgb
 
+# Generate synthetic dataset
+np.random.seed(0)
 
 # e.g., [i, x, z, month]
 X = np.array([[5.48, 2.3, 1.7, 8],
@@ -53,18 +53,8 @@ print("Training target variables:")
 print(y)
 
 # Create and train the model
-
-# Linear Regression
-linRegModel = LinearRegression()
-linRegModel.fit(X, y)
-
-# RandomForest
-randomForestModel = RandomForestRegressor()
-randomForestModel.fit(X, y)
-
-# XGBoost
-xgBoostModel = xgb.XGBRegressor()
-xgBoostModel.fit(X, y)
+model = LinearRegression()
+model.fit(X, y)
 
 # Make predictions on new data
 # next 12 month for example
@@ -81,26 +71,11 @@ new_data = np.array([[5.3, 1.1, 2.4, 3.7],
                      [4.5, 2.7, 4.9, 3.8],
                      [6.5, 3.1, 1.7, 5.3]])
 
-linRegPredictions = linRegModel.predict(new_data)
-randomForestPredictions = randomForestModel.predict(new_data)
-xgBoostPredictions = xgBoostModel.predict(new_data)
+predictions = model.predict(new_data)
 
 # Print the coefficients and predictions
-print("Linear Regression Coefficients:", linRegModel.coef_)
-print("Linear Regression Intercept:", linRegModel.intercept_)
-print("Linear Regression Predictions:")
-for prediction in linRegPredictions:
-    print(prediction)
-
-# Print the coefficients and predictions
-print("Feature Importances:", randomForestModel.feature_importances_)
-print("RandomForest Predictions:")
-for prediction in randomForestPredictions:
-    print(prediction)
-
-
-# Print the coefficients and predictions
-print("Feature Importances:", xgBoostModel.feature_importances_)
-print("XGBoost Predictions:")
-for prediction in xgBoostPredictions:
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)
+print("Predictions:")
+for prediction in predictions:
     print(prediction)
