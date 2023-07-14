@@ -74,7 +74,7 @@ exports.getTopics = async (req, res) => {
         for(let i=0; i<topics.length; i++){
             
             let filteredPosts = fps.filter(val => {
-                return val.topic?.toString() == topics[i]?.toString()
+                return val.topic == topics[i]
             });
             
             let amount = filteredPosts.length; 
