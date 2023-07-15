@@ -4,10 +4,13 @@ const Op = db.Sequelize.Op;
 const Forumcomment = db.forumcomment;
 const Forumpost = db.forumpost;
 const forumService = require("../services/forum.service");
+const generalConfig = require("../config/general.config");
+const axios = require("axios")
 const moment = require('moment')
 require('moment/locale/de')
 var bcrypt = require("bcryptjs");
 
+API_URL = generalConfig.apiURL
 
 exports.test = async (req, res) => {
     const t = await sequelize.transaction();
@@ -124,6 +127,31 @@ exports.getTopics = async (req, res) => {
                 await data.push([i.toString(), amount])
             }
         }
+        if(data.length>3){
+            let lastThree = [];
+            for(let i=data.length-3; i<data.length; i++){
+                //console.log(data[i][1]) 
+                lastThree.push(data[i][1])
+            }
+
+            console.log(lastThree)
+
+            await axios.post(API_URL + "/predict", {occurances: lastThree} ,{withCredentials: true} )
+            .then(response => {
+                if (response.status == 200) {  
+                    data.push([(endyear+1).toString(),  Math.floor(response.data.predictions)])
+                    console.log(data) 
+                }
+                else{  
+                    console.log(response);
+                    throw Error("Something went wrong! The Following Error Occured: " + response);   
+                } 
+            })
+            .catch(e=>{
+                throw Error("Something went wrong! The Following Error Occured: " + e);
+            });
+        }
+        
         res.status(200).send(data);
     }catch (err) {
         console.log(err);
