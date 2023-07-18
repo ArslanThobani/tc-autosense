@@ -1,0 +1,20 @@
+{
+  "BMW": [
+    "https://www.motor-talk.de/forum/bmw-i3-b1153.html",
+    "https://www.motor-talk.de/forum/bmw-i4-b1154.html",
+    "https://www.motor-talk.de/forum/bmw-ix-b1166.html",
+    "https://www.motor-talk.de/forum/bmw-ix1-b1180.html",
+    "https://www.motor-talk.de/forum/bmw-ix3-b1167.html"
+  ],
+  "Mercedes": [
+    "https://www.motor-talk.de/forum/mercedes-eqa-b1137.html",
+    "https://www.motor-talk.de/forum/mercedes-eqc-b1138.html",
+    "https://www.motor-talk.de/forum/mercedes-eqv-b1139.html"
+  ],
+  "Volkswagen": [
+    "https://www.motor-talk.de/forum/vw-e-up-b965.html",
+    "https://www.motor-talk.de/forum/vw-e-up-b965.html",
+    "https://www.motor-talk.de/forum/vw-e-golf-b966.html",
+    "https://www.motor-talk.de/forum/vw-id-familie-b1085.html"
+  ]
+}
