@@ -106,45 +106,66 @@ exports.getTopics = async (req, res) => {
             }
         });
 
-        let data = [["Year", "Occurences"]];
+        let data = [["Quater", "Occurences"]];
 
         let startYeat = 1980
         let date = new Date()
         let endyear = date.getFullYear()
+        let endquater = parseInt(moment(date).quarter())
         for(let i=startYeat; i<=endyear; i++){
-            let from = new Date(i, 0, 1, 0, 0, 0)
-            let to = new Date(i, 11, 31, 23, 59, 59)
-            let filteredPosts = fps.filter(val => {
-                return moment(val.postdate).isBetween(from, to)
-            });
-            
-            let amount = filteredPosts.length; 
-            if(amount == 0){
-                if(data.length > 1){
-                    await data.push([i.toString(), amount])
-                }                
-            }else{
-                await data.push([i.toString(), amount])
+            for(let j=1; j<=10; j=j+3){
+                let currentQuarter = (j+2)/3
+                let dt = new Date(i, j-1, 1, 0, 0, 0)
+                let from = moment(dt);
+                let to = from.add(3, 'months').subtract(1, "seconds")
+                from = dt
+                to = to.toDate()
+                let filteredPosts = fps.filter(val => {                     
+                    return moment(val.postdate).isBetween(from, to)
+                });
+
+                let lastQ = false 
+                let fact = 0
+                if(i==endyear  && currentQuarter==endquater){
+                    lastQ = true
+                    let diff = moment(to).diff(moment(date), 'days')
+                    fact = 91/(91-diff)
+                }
+                
+                let amount = 0
+                if(lastQ){
+                    amount = parseInt(filteredPosts.length*fact)
+                }else{
+                    amount = filteredPosts.length;
+                }
+                if(amount == 0){
+                    if(data.length > 1){
+                        await data.push(["Q" + ((j+2)/3).toString() + " " + i.toString(), amount])
+                    }                
+                }else{
+                    await data.push(["Q" + ((j+2)/3).toString() + " " + i.toString(), amount])
+                }
+                if(lastQ){break;}
             }
         }
         if(data.length>3){
             let lastThree = [];
             for(let i=data.length-3; i<data.length; i++){
-                //console.log(data[i][1]) 
                 lastThree.push(data[i][1])
             }
-
-            console.log(lastThree)
 
             await axios.post(API_URL + "/predict", {occurances: lastThree} ,{withCredentials: true} )
             .then(response => {
                 if (response.status == 200) {  
-                    data.push([(endyear+1).toString(),  Math.floor(response.data.predictions)])
-                    console.log(data) 
+                    if(endquater != 4){
+                        data.push(["Q" + (endquater+1).toString() + " " + endyear.toString(),  Math.floor(response.data.predictions)])
+                    }else{                        
+                        data.push(["Q" + (1).toString() + " " + (endyear+1).toString(),  Math.floor(response.data.predictions)])
+                    }                    
                 }
                 else{  
                     console.log(response);
-                    throw Error("Something went wrong! The Following Error Occured: " + response);   
+                    throw Error("Something went wrong! The Following Error Occured: " + response);    
                 } 
             })
             .catch(e=>{
