@@ -10,10 +10,6 @@ module.exports = function(app) {
         next();
     });
 
-    app.post(
-        "/api/test",
-        controller.test
-    );
 
     app.post(
         "/api/getTopics",
@@ -34,7 +30,6 @@ module.exports = function(app) {
         "/api/getCountProblems",
         controller.getCountProblems
     );
-
     
     app.post( 
         "/api/getCountProblemsYear",

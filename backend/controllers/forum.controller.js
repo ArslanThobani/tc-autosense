@@ -12,18 +12,12 @@ var bcrypt = require("bcryptjs");
 
 API_URL = generalConfig.apiURL
 
-exports.test = async (req, res) => {
-    const t = await sequelize.transaction();
-    try{ 
-        await t.commit(); 
-        res.status(200).send({ test: "test"});
-    }catch (err) {
-        console.log(err);
-        await t.rollback();
-        res.status(500).send({ message: err.message });
-  } 
-};
 
+/**
+   * returns a list with all available topics
+   * @param {} req 
+   * @param {*} res 
+   */
 exports.getTopics = async (req, res) => {
     try{ 
         let topics = await forumService.getTopics() 
@@ -34,6 +28,11 @@ exports.getTopics = async (req, res) => {
     }
   };
 
+  /**
+   * returns a list with all available brands
+   * @param {} req 
+   * @param {*} res 
+   */
   exports.getBrands = async (req, res) => {
     try{ 
         let brands = await forumService.getBrands() 
@@ -44,6 +43,11 @@ exports.getTopics = async (req, res) => {
     }
   };
 
+  /**
+   * returns a list with all available modles for a given brand
+   * @param {*} req 
+   * @param {*} res 
+   */
   exports.getModels = async (req, res) => {
     try{ 
         let fps = await db.forumpost.findAll({
@@ -62,6 +66,12 @@ exports.getTopics = async (req, res) => {
     }
   };
 
+  /**
+   * Total number of occurences in posts per topic
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   */
   exports.getCountProblems = async (req, res) => {
     try{ 
         let fps = await Forumpost.findAll({
@@ -95,7 +105,11 @@ exports.getTopics = async (req, res) => {
     }
   };
 
-  
+  /**
+   * Calculates the number of posts per quarter. Also predicts the next quarter
+   * @param {*} req 
+   * @param {*} res 
+   */
   exports.getCountProblemsYear = async (req, res) => {
     try{ 
         let fps = await Forumpost.findAll({
@@ -140,10 +154,10 @@ exports.getTopics = async (req, res) => {
                 }
                 if(amount == 0){
                     if(data.length > 1){
-                        await data.push(["Q" + ((j+2)/3).toString() + " " + i.toString(), amount])
+                        await data.push(["Q" + currentQuarter.toString() + " " + i.toString(), amount])
                     }                
                 }else{
-                    await data.push(["Q" + ((j+2)/3).toString() + " " + i.toString(), amount])
+                    await data.push(["Q" + currentQuarter.toString() + " " + i.toString(), amount])
                 }
                 if(lastQ){break;}
             }
