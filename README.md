@@ -14,7 +14,8 @@ The dashboard gives insight to the manufacturers about the problems occurring in
   - Zentralverriegelung
   - Reifen und Felgen
   - Dachträger und Dachboxen
-  We would be able to add more categories going forward with the availability of additional data and time.
+  
+We would be able to add more categories going forward with the availability of additional data and time.
 ![Total Occurrences](https://github.com/ArslanThobani/tc-autosense/assets/24518505/aaee76a7-23e6-4560-a435-f9179cc798a1)
 
     
